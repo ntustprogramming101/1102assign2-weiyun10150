@@ -110,7 +110,26 @@ void draw() {
     image(groundhogDown, hogX, hogY);
     }
     else if(leftPressed){
-    image(groundhogLeft, hogX, hogY);
+    switch(frameT){
+        case 1:
+          image(groundhogLeft, hogX + speed, hogY);
+          frameT ++;
+          break;
+        case 2:
+          image(groundhogLeft, hogX + speed/ 2, hogY);
+          frameT ++;
+          break;
+        case 3:
+          image(groundhogLeft, hogX + (int)speed/ 3, hogY);
+          frameT ++;
+          break;  
+        case 4:
+          image(groundhogLeft, hogX + speed/ 4, hogY);
+          frameT = 1;
+          break;
+        default:
+          break;
+      }
     }
     else if(rightPressed){
       switch(frameT){
@@ -133,7 +152,6 @@ void draw() {
         default:
           break;
       }
-      
     }
   }
 }
