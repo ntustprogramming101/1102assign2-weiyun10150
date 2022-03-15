@@ -278,6 +278,10 @@ void draw() {
          image(restartHovered, 248, 360);
          if(mousePressed){
            lifebar = 2;
+           int[] cabbageYseeds = {240, 320, 400, 480};
+           int[] cabbageXseeds = {80, 160, 240, 320, 400, 480};
+           cabbageY = cabbageYseeds[floor(random(0, 3))];
+           cabbageX = cabbageXseeds[floor(random(0, 5))];
            gameState = GameRun;
           }
          }
