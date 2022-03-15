@@ -278,7 +278,7 @@ void draw() {
          image(restartHovered, 248, 360);
          if(mousePressed){
            lifebar = 2;
-           gameState = GameStart;
+           gameState = GameRun;
           }
          }
       break;
