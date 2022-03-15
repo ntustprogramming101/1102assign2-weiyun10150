@@ -23,7 +23,7 @@ int lifebar = 2;
 int hogX = 320, hogY = 80;
 int speed = 80;
 
-boolean Idle = true;
+
 boolean upPressed = false;
 boolean downPressed = false;
 boolean leftPressed = false;
@@ -56,6 +56,7 @@ void setup() {
 void draw() {
   
   /////////////////static graphic//////////
+  
 	image(bg, 0, 0);
   image(soil, 0, 160);
   //sun
@@ -67,6 +68,7 @@ void draw() {
   noStroke();
   fill(124,204,25);
   rect(0, 145, 640, 15);
+  
   ////////////////dynamic grahphic////////
   
   //life bar
@@ -78,9 +80,6 @@ void draw() {
     loop++;
   }
        
-  if(Idle){
-    image(groundhogIdle, hogX, hogY); //character initial position
-  }
   //border limitation
   if(hogX >= 560){
     hogX = 560;
@@ -95,36 +94,5 @@ void draw() {
     hogY = 400;
   }
   
-  if (key == CODED) {
-    switch (keyCode) {
-      case UP:
-        
-        Idle = false;
-        hogY -= (int)80/60;
-        if(!Idle){
-          image(groundhogUp, hogX, hogY);
-        }
-        
-        break;
-      case DOWN:
-       
-        Idle = false;
-        hogY += 80;
-        if(!Idle){
-          image(groundhogDown, hogX, hogY);
-        }
-        Idle = true;
-        break;
-        
-      case LEFT:
-        leftPressed = true;
-        Idle = false;
-        break;
-      case RIGHT:
-        rightPressed = true;
-        Idle = false;
-        break;
-    }
-  }
   
 }
