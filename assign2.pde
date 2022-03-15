@@ -23,7 +23,7 @@ int lifebar = 2;
 int hogX = 320, hogY = 80;
 int speed = 80;
 
-
+boolean isMoving = false;
 boolean upPressed = false;
 boolean downPressed = false;
 boolean leftPressed = false;
@@ -34,9 +34,11 @@ boolean rightPressed = false;
 void setup() {
   
 	size(640, 480, P2D);
+  frameRate(60);
+
 	bg = loadImage("img/bg.jpg");
   cabbage = loadImage("img/cabbage.png");
-  gameover = loadImage("img/gameover.png");
+  gameover = loadImage("img/gameover.jpg");
   groundhogUp = loadImage("img/groundhogUp .png");
   groundhogDown = loadImage("img/groundhogDown.png");
   groundhogIdle = loadImage("img/groundhogIdle.png");
@@ -94,5 +96,78 @@ void draw() {
     hogY = 400;
   }
   
+  //character sprite 
   
+  if(!isMoving){
+    image(groundhogIdle, hogX, hogY);
+  }
+  else{
+    if(upPressed){
+    image(groundhogUp, hogX, hogY);
+    }
+    else if(downPressed){
+    image(groundhogDown, hogX, hogY);
+    }
+    else if(leftPressed){
+    image(groundhogLeft, hogX, hogY);
+    }
+    else if(rightPressed){
+    image(groundhogRight, hogX, hogY);
+    }
+  }
+  
+  
+  
+}
+
+
+
+void keyPressed() {
+  if (key == CODED) { // detect special keys 
+    switch (keyCode) {
+      case UP:
+        upPressed = true;
+        isMoving = true;
+        hogY -= speed;
+        break;
+      case DOWN:
+        downPressed = true;
+        isMoving = true;
+        hogY += speed;
+        break;
+      case LEFT:
+        leftPressed = true;
+        isMoving = true;
+        hogX -= speed;
+        break;
+      case RIGHT:
+        rightPressed = true;
+        isMoving = true;
+        hogX += speed;
+        break;
+    }
+  }
+}
+
+void keyReleased() {
+  if (key == CODED) {
+    switch (keyCode) {
+      case UP:
+        isMoving = false;
+        upPressed = false;
+        break;
+      case DOWN:
+        isMoving = false;
+        downPressed = false;
+        break;
+      case LEFT:
+        isMoving = false;
+        leftPressed = false;
+        break;
+      case RIGHT:
+        isMoving = false;
+        rightPressed = false;
+        break;
+    }
+  }
 }
