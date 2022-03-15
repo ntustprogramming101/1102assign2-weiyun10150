@@ -44,7 +44,7 @@ boolean rightPressed = false;
 void setup() {
   
 	size(640, 480, P2D);
-  
+  frameRate(60);
 
 	bg = loadImage("img/bg.jpg");
   cabbage = loadImage("img/cabbage.png");
