@@ -22,7 +22,7 @@ PImage title;
 int lifebar = 2;
 int hogX = 320, hogY = 80;
 int speed = 80;
-
+int frameT = 1;
 
 boolean isMoving = false;
 boolean upPressed = false;
@@ -35,7 +35,7 @@ boolean rightPressed = false;
 void setup() {
   
 	size(640, 480, P2D);
-  frameRate(60);
+
 
 	bg = loadImage("img/bg.jpg");
   cabbage = loadImage("img/cabbage.png");
@@ -59,7 +59,7 @@ void setup() {
 void draw() {
   
   /////////////////static graphic//////////
-  
+  frameRate(60);
 	image(bg, 0, 0);
   image(soil, 0, 160);
   //sun
@@ -113,12 +113,29 @@ void draw() {
     image(groundhogLeft, hogX, hogY);
     }
     else if(rightPressed){
-    image(groundhogRight, hogX, hogY);
+      switch(frameT){
+        case 1:
+          image(groundhogRight, hogX - speed, hogY);
+          frameT ++;
+          break;
+        case 2:
+          image(groundhogRight, hogX - speed/ 2, hogY);
+          frameT ++;
+          break;
+        case 3:
+          image(groundhogRight, hogX - (int)speed/ 3, hogY);
+          frameT ++;
+          break;  
+        case 4:
+          image(groundhogRight, hogX - speed/ 4, hogY);
+          frameT++;
+          break;
+        default:
+          frameT = 1 ;
+          break;
+      }    
     }
   }
-  
-  
-  
 }
 
 
@@ -148,6 +165,7 @@ void keyPressed() {
         break;
     }
   }
+
 }
 
 void keyReleased() {
