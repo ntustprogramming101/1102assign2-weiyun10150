@@ -23,6 +23,7 @@ int lifebar = 2;
 int hogX = 320, hogY = 80;
 int speed = 80;
 
+
 boolean isMoving = false;
 boolean upPressed = false;
 boolean downPressed = false;
@@ -103,7 +104,7 @@ void draw() {
   }
   else{
     if(upPressed){
-    image(groundhogUp, hogX, hogY);
+      image(groundhogUp, hogX, hogY);
     }
     else if(downPressed){
     image(groundhogDown, hogX, hogY);
