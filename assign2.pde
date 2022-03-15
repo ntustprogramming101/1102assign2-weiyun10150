@@ -128,12 +128,12 @@ void draw() {
           break;  
         case 4:
           image(groundhogRight, hogX - speed/ 4, hogY);
-          frameT++;
+          frameT = 1;
           break;
         default:
-          frameT = 1 ;
           break;
-      }    
+      }
+      
     }
   }
 }
