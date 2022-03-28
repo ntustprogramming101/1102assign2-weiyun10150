@@ -116,7 +116,7 @@ void draw() {
           lifebar -= 1;
         }
         
-        hogX = 400;
+        hogX = 320;
         hogY = 80;
       }
       /////////////////static graphic//////////
