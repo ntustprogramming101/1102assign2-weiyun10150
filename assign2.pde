@@ -21,19 +21,19 @@ PImage title;
 final int GameStart = 0;
 final int GameRun = 1;
 final int GameOver = 2;
+final int hogIdle = 0, hogDown = 1, hogRight = 2, hogLeft = 3;
+int hogDraw = hogIdle;
 int gameState = GameStart;
+float movementTimer;
 
 
 int lifebar = 2;
 int hogX = 320, hogY = 80;
 int speed = 80;
-int frameT = 1;
 int soldierY, soldierX;
 int cabbageX, cabbageY;
 
 
-
-boolean isMoving = false;
 boolean upPressed = false;
 boolean downPressed = false;
 boolean leftPressed = false;
@@ -118,6 +118,7 @@ void draw() {
         
         hogX = 320;
         hogY = 80;
+        hogDraw = hogIdle;
       }
       /////////////////static graphic//////////
       frameRate(60);
@@ -148,7 +149,45 @@ void draw() {
       }
       //cabbage
       image(cabbage, cabbageX, cabbageY);
-      
+      //movement timer setting
+      if(movementTimer == 15){
+        hogDraw = hogIdle;
+        if((hogY % speed) < 30){
+          hogY = hogY - hogY % speed;
+        }else{
+          hogY = hogY - hogY % speed + speed;
+        }
+        if((hogX % speed) < 30){
+          hogX = hogX - hogX % speed;
+        }else{
+          hogX = hogX - hogX % speed + speed;
+        }
+        
+        movementTimer = 0; //reset
+      }
+      //Hog moveing sprite
+      switch(hogDraw){
+        case hogIdle:
+          image(groundhogIdle, hogX, hogY);
+          movementTimer = 0.0;
+          break;
+   
+        case hogDown:
+          image(groundhogDown, hogX, hogY);
+          hogY += speed / 15.0;
+          movementTimer++;
+          break;
+        case hogRight:
+          image(groundhogRight, hogX, hogY);
+          hogX += speed / 15.0;
+          movementTimer++;
+          break;
+        case hogLeft:
+          image(groundhogLeft, hogX, hogY);
+          hogX -= speed / 15.0;
+          movementTimer++;
+          break;
+      }
       
       //border limitation
       if(hogX >= 560){
@@ -164,101 +203,6 @@ void draw() {
         hogY = 400;
       }
       
-      //character sprite 
-      
-      if(!isMoving){
-        image(groundhogIdle, hogX, hogY);
-      }
-      else{
-        if(upPressed){
-          switch(frameT){
-            case 1:
-              image(groundhogUp, hogX , (hogY + speed / 4) + 80);
-              frameT ++;
-              break;
-            case 2:
-              image(groundhogUp, hogX , hogY + ((int)speed / 3) + 80);
-              frameT ++;
-              break;
-            case 3:
-              image(groundhogUp, hogX , hogY + (speed / 2) + 80);
-              frameT ++;
-              break;  
-            case 4:
-              image(groundhogUp, hogX , hogY);
-              frameT = 1;
-              break;
-            default:
-              break;
-          }
-        }
-        else if(downPressed){
-        switch(frameT){
-            case 1:
-              image(groundhogDown, hogX , (hogY + speed / 4) - 80);
-              frameT ++;
-              break;
-            case 2:
-              image(groundhogDown, hogX , hogY + ((int)speed / 3) - 80);
-              frameT ++;
-              break;
-            case 3:
-              image(groundhogDown, hogX , hogY + (speed / 2) - 80);
-              frameT ++;
-              break;  
-            case 4:
-              image(groundhogDown, hogX , hogY);
-              frameT = 1;
-              break;
-            default:
-              break;
-          }
-        }
-        else if(leftPressed){
-        switch(frameT){
-            case 1:
-              image(groundhogLeft, hogX + speed, hogY);
-              frameT ++;
-              break;
-            case 2:
-              image(groundhogLeft, hogX + speed/ 2, hogY);
-              frameT ++;
-              break;
-            case 3:
-              image(groundhogLeft, hogX + (int)speed/ 3, hogY);
-              frameT ++;
-              break;  
-            case 4:
-              image(groundhogLeft, hogX + speed/ 4, hogY);
-              frameT = 1;
-              break;
-            default:
-              break;
-          }
-        }
-        else if(rightPressed){
-          switch(frameT){
-            case 1:
-              image(groundhogRight, hogX - speed, hogY);
-              frameT ++;
-              break;
-            case 2:
-              image(groundhogRight, hogX - speed/ 2, hogY);
-              frameT ++;
-              break;
-            case 3:
-              image(groundhogRight, hogX - (int)speed/ 3, hogY);
-              frameT ++;
-              break;  
-            case 4:
-              image(groundhogRight, hogX - speed/ 4, hogY);
-              frameT = 1;
-              break;
-            default:
-              break;
-          }
-        }
-      }
       /////soldier part////
       if(soldierX > 640){  //drag the solder outside off the border
         soldierX = 0;
@@ -268,6 +212,7 @@ void draw() {
       }
       image(soldier, soldierX, soldierY);
       break;
+
       case GameOver:
         image(gameover, 0, 0);
         image(restartNormal, 248, 360);
@@ -283,11 +228,11 @@ void draw() {
            cabbageY = cabbageYseeds[floor(random(0, 3))];
            cabbageX = cabbageXseeds[floor(random(0, 5))];
            gameState = GameRun;
+           hogDraw = hogIdle;
           }
          }
       break;
-      
-  } 
+  }
 }
 
 ///////////////////////////////////////////key detection//////////////////////////////////
@@ -295,25 +240,23 @@ void draw() {
 void keyPressed() {
   if (key == CODED) { // detect special keys 
     switch (keyCode) {
-      case UP:
-        upPressed = true;
-        isMoving = true;
-        hogY -= speed;
-        break;
       case DOWN:
-        downPressed = true;
-        isMoving = true;
-        hogY += speed;
+        if(hogDraw == hogIdle){
+          hogDraw = hogDown;
+          movementTimer = 0;
+        }
         break;
       case LEFT:
-        leftPressed = true;
-        isMoving = true;
-        hogX -= speed;
+        if(hogDraw == hogIdle){
+          hogDraw = hogLeft;
+          movementTimer = 0;
+        }
         break;
       case RIGHT:
-        rightPressed = true;
-        isMoving = true;
-        hogX += speed;
+        if(hogDraw == hogIdle){
+            hogDraw = hogRight;
+            movementTimer = 0;
+        }
         break;
     }
   }
@@ -321,24 +264,5 @@ void keyPressed() {
 }
 
 void keyReleased() {
-  if (key == CODED) {
-    switch (keyCode) {
-      case UP:
-        isMoving = false;
-        upPressed = false;
-        break;
-      case DOWN:
-        isMoving = false;
-        downPressed = false;
-        break;
-      case LEFT:
-        isMoving = false;
-        leftPressed = false;
-        break;
-      case RIGHT:
-        isMoving = false;
-        rightPressed = false;
-        break;
-    }
-  }
+ 
 }
